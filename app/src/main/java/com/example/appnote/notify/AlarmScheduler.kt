@@ -4,27 +4,27 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.example.appnote.Notes
+import com.example.appnote.model.Note
 import com.example.appnote.R
 import java.util.*
 
 object AlarmScheduler {
 
-    fun scheduleAlarmsForReminder(context: Context, notes: Notes){
+    fun scheduleAlarmsForReminder(context: Context, note: Note){
         val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val day = notes.day
+        val day = note.day
         if(day != null){
-            val alarmIntent = createPendingIntent(context, notes, day)
-            scheduleAlarm(notes, alarmIntent, alarmMgr)
+            val alarmIntent = createPendingIntent(context, note, day)
+            scheduleAlarm(note, alarmIntent, alarmMgr)
         }
     }
 
-    private fun scheduleAlarm(notes: Notes, alarmIntent: PendingIntent?, alarmMgr: AlarmManager){
+    private fun scheduleAlarm(note: Note, alarmIntent: PendingIntent?, alarmMgr: AlarmManager){
         val datetimeToAlarm = Calendar.getInstance(Locale.getDefault())
 
-        val hour = notes.hour?.toInt() ?: 20
-        val min = notes.minute?.toInt()  ?: 50
+        val hour = note.hour?.toInt() ?: 20
+        val min = note.minute?.toInt()  ?: 50
 
         datetimeToAlarm.timeInMillis = System.currentTimeMillis()
         datetimeToAlarm.set(Calendar.HOUR_OF_DAY, hour)
@@ -45,12 +45,13 @@ object AlarmScheduler {
             datetimeToAlarm.timeInMillis, (1000 * 60 * 60 * 24 * 7).toLong(), alarmIntent)
     }
 
-    private fun createPendingIntent(context: Context, notes: Notes, day: String?): PendingIntent {
+    private fun createPendingIntent(context: Context, note: Note, day: String?): PendingIntent {
 
         val intent = Intent(context.applicationContext, AlarmReceiver::class.java).apply {
             action = context.getString(R.string.action_notify_task)
-            type = "$day-${notes.title}--${notes.description}"
-            putExtra("id",  notes.id)
+            type = "$day-${note.title}--${note.description}"
+            putExtra("title", note.title)
+            putExtra("description", note.description)
         }
 
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

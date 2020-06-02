@@ -8,8 +8,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.appnote.MainActivity
-import com.example.appnote.Notes
+import com.example.appnote.view.main.MainActivity
+import com.example.appnote.model.Note
 import com.example.appnote.R
 
 object NotificationHelper {
@@ -21,17 +21,19 @@ object NotificationHelper {
             channel.description = description
             channel.setShowBadge(showBadge)
 
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+            val notificationManager: NotificationManager? = context.getSystemService(NotificationManager::class.java)
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel)
+            }
         }
     }
 
-    fun createSampleDataNotification(context: Context, notes: Notes, autoCancel: Boolean){
+    fun createSampleDataNotification(context: Context, note: Note, autoCancel: Boolean){
         val channelId = "${context.packageName}--${context.getString(R.string.app_name)}"
         val notificationBuilder = NotificationCompat.Builder(context, channelId).apply {
             setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
-            setContentTitle(notes.title)
-            setStyle(NotificationCompat.BigTextStyle().bigText(notes.description))
+            setContentTitle(note.title)
+            setStyle(NotificationCompat.BigTextStyle().bigText(note.description))
             priority = NotificationCompat.PRIORITY_DEFAULT
             setAutoCancel(autoCancel)
 

@@ -1,10 +1,11 @@
-package com.example.appnote
+package com.example.appnote.view.delete
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import com.example.appnote.view.main.MainActivity
 
 class DeleteDialog: DialogFragment() {
 
