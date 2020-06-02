@@ -15,7 +15,7 @@ class ResearchActivity : AppCompatActivity() {
 
     private var listOfItems = arrayOf("id", "title")
     var type = ""
-    var idDialog = 0
+    var idDialog = ""
 
     private lateinit var firebaseFirestore: FirebaseFirestore
 
@@ -74,6 +74,7 @@ class ResearchActivity : AppCompatActivity() {
 
             for (doc in querySnapshot!!){
                 cardViewResearch.visibility = View.VISIBLE
+                idDialog = doc.id
                 doc.getString("title")?.let {
                     titleResearchTV.text = it
                 }
