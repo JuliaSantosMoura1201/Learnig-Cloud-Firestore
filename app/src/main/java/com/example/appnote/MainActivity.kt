@@ -32,23 +32,7 @@ class MainActivity : AppCompatActivity() {
 
 
         firebaseFirestore = FirebaseFirestore.getInstance()
-        firebaseFirestore.collection("notes")
-            .get()
-            .addOnSuccessListener{ documents ->
-                val notesList = ArrayList<Note>()
-                for (doc in documents!!){
-                    val note = Note()
-                    note.id = doc.id
-                    doc.getString("title")?.let {
-                        note.title = it
-                    }
-                    doc.getString("description")?.let {
-                       note.description = it
-                    }
-                    notesList.add(note)
-                }
-                getAllNotes(notesList)
-            }
+        getAllNotes()
 
         addNotes.setOnClickListener {
             startActivity(Intent(this, AddNotesActivity::class.java))
@@ -63,7 +47,27 @@ class MainActivity : AppCompatActivity() {
         //getAllNotes()
     }
 
-    private fun getAllNotes(list: ArrayList<Note>){
+    private fun getAllNotes(){
+        firebaseFirestore.collection("notes")
+            .get()
+            .addOnSuccessListener{ documents ->
+                val notesList = ArrayList<Note>()
+                for (doc in documents!!){
+                    val note = Note()
+                    note.id = doc.id
+                    doc.getString("title")?.let {
+                        note.title = it
+                    }
+                    doc.getString("description")?.let {
+                        note.description = it
+                    }
+                    notesList.add(note)
+                }
+                fillAdapter(notesList)
+            }
+    }
+
+    private fun fillAdapter(list: ArrayList<Note>){
 
         notesRV.adapter = NotesAdapter(list, getScreenWidth(), object : NotesAdapter.NotesListener {
             override fun deleteNote(id: String) {
@@ -112,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                //getAllNotes()
+                fillAdapter(ArrayList())
             }
             R.id.researchOption -> {
                 startActivity(Intent(this, ResearchActivity::class.java))
@@ -133,6 +137,6 @@ class MainActivity : AppCompatActivity() {
         firebaseFirestore.collection("notes")
             .document(idDialog)
             .delete()
-        //getAllNotes()
+        getAllNotes()
     }
 }
