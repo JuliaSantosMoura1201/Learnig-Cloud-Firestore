@@ -97,14 +97,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleResearchTV" />
 
-            <TextView
+            <CheckBox
                 android:id="@+id/idResearchTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:button="@drawable/ic_check_box_outline_blank_black_24dp"
                 android:padding="10dp"
-                android:text="@string/txt_id"
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="28sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

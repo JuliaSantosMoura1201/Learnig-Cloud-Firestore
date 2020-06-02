@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -61,6 +62,9 @@ class MainActivity : AppCompatActivity() {
                     doc.getString("description")?.let {
                         note.description = it
                     }
+                    doc.getBoolean("state")?.let {
+                        note.state = it
+                    }
                     notesList.add(note)
                 }
                 fillAdapter(notesList)
@@ -82,9 +86,69 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
+            override fun changeState(id: String) {
+                idDialog = id
+                fieldComponents()
+            }
+
         })
 
         notesRV.adapter!!.notifyDataSetChanged()
+    }
+
+    private fun fieldComponents(){
+
+        firebaseFirestore.collection("notes")
+            .document(idDialog)
+            .get()
+            .addOnSuccessListener { doc ->
+                val note = Note()
+                if (doc != null) {
+                    doc.getString("title")?.let {
+                       note.title = it
+                    }
+                    doc.getString("description")?.let {
+                       note.description = it
+                    }
+                    doc.getString("place")?.let {
+                       note.place = it
+                    }
+                    doc.getString("year")?.let {
+                        note.year = it
+                    }
+
+                    doc.getString("month")?.let {
+                        note.month = it
+                    }
+
+                    doc.getString("day")?.let {
+                        note.day = it
+                    }
+
+                    doc.getString("hour")?.let {
+                        note.hour = it
+                    }
+
+                    doc.getString("minute")?.let{
+                        note.minute = it
+                    }
+
+                    doc.getBoolean("state")?.let {
+                        note.state = !it
+                    }
+
+                    firebaseFirestore.collection("notes")
+                        .document(idDialog)
+                        .set(note)
+                    getAllNotes()
+                }
+                return@addOnSuccessListener
+            }
+            .addOnFailureListener { exception ->
+                Log.d("what", "get failed with", exception)
+            }
+
+
     }
 
     private fun getScreenWidth(): Int{
@@ -109,9 +173,9 @@ class MainActivity : AppCompatActivity() {
                             deleteList.add(doc.id)
                         }
 
-                        for (item in deleteList){
+                        for (doc in deleteList){
                             firebaseFirestore.collection("notes")
-                                .document(item)
+                                .document(doc)
                                 .delete()
                         }
                     }

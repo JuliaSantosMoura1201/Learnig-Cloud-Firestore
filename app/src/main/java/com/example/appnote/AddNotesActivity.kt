@@ -203,8 +203,8 @@ class AddNotesActivity : AppCompatActivity() {
             configYear(date),
             configHour(time),
             configMinute(time),
-            editPlace.text.toString()
-
+            editPlace.text.toString(),
+            false
         )
     }
 

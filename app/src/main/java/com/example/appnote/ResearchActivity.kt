@@ -77,8 +77,12 @@ class ResearchActivity : AppCompatActivity() {
                 doc.getString("description")?.let {
                     descResearchTV.text = it
                 }
-                doc.get("id")?.let {
-                    idResearchTV.text = it.toString()
+                doc.getBoolean("state")?.let {
+                    if(it){
+                        idResearchTV.setButtonDrawable(R.drawable.ic_check_box_black_24dp)
+                    }else{
+                        idResearchTV.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp)
+                    }
                 }
             }
         }

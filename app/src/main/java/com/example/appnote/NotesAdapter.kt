@@ -24,6 +24,16 @@ class NotesAdapter (private val notesList: ArrayList<Note>, private val width: I
         holder.itemView.cardNotes.layoutParams.width = (width / 2) - 30
         holder.itemView.titleResearchTV.text = notesList[position].title
         holder.itemView.descResearchTV.text = notesList[position].description
+
+        if (notesList[position].state!!){
+            holder.itemView.idResearchTV.setButtonDrawable(R.drawable.ic_check_box_black_24dp)
+        }else{
+            holder.itemView.idResearchTV.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp)
+        }
+
+        holder.itemView.idResearchTV.setOnClickListener {
+            notesList[position].id?.let { it1 -> listener.changeState(it1) }
+        }
         holder.itemView.cardNotes.setOnLongClickListener {
             notesList[position].id?.let { it1 -> listener.deleteNote(it1) }
             return@setOnLongClickListener true
@@ -39,5 +49,6 @@ class NotesAdapter (private val notesList: ArrayList<Note>, private val width: I
     interface NotesListener {
         fun deleteNote(id: String)
         fun editNote(id: String)
+        fun changeState(id: String)
     }
 }

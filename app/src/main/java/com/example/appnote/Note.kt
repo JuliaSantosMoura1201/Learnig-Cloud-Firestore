@@ -9,5 +9,6 @@ data class Note(
     var year: String? = null,
     var hour: String? = null,
     var minute: String? = null,
-    var place: String? = null
+    var place: String? = null,
+    var state: Boolean? = false
 )
