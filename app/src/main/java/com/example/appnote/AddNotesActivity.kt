@@ -195,6 +195,7 @@ class AddNotesActivity : AppCompatActivity() {
         val time = editTime.text.toString()
 
         return Note(
+            "",
             title_EditText.text.toString(),
             description_EditText.text.toString(),
             configDay(date),
