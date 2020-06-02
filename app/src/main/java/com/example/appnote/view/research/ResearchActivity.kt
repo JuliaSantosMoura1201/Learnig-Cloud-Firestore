@@ -1,4 +1,4 @@
-package com.example.appnote
+package com.example.appnote.view.research
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,11 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.google.firebase.firestore.FirebaseFirestore
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.appnote.R
+import com.example.appnote.model.Note
+import com.example.appnote.view.add.AddNotesActivity
 import kotlinx.android.synthetic.main.activity_research.*
 
 class ResearchActivity : AppCompatActivity() {
@@ -16,13 +20,14 @@ class ResearchActivity : AppCompatActivity() {
     var type = ""
     private var idDialog = ""
 
-    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var viewModel: ResearchViewModel
+    private lateinit var note: Note
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_research)
 
-        firebaseFirestore = FirebaseFirestore.getInstance()
+        viewModel = ViewModelProvider(this).get(ResearchViewModel::class.java)
 
         configSpinner()
 
@@ -54,38 +59,23 @@ class ResearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeResearch(){
+    private fun makeResearch() {
         cardViewResearch.visibility = View.GONE
 
-        firebaseFirestore.collection("notes").whereEqualTo(type, edtNote.text.toString())
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-            if(firebaseFirestoreException != null){
-                showToast()
-                return@addSnapshotListener
-            }
-                if (querySnapshot == null || querySnapshot.isEmpty){
-                    showToast()
-                    return@addSnapshotListener
-                }
+        viewModel.research(type, edtNote.text.toString()).observe(this, Observer {
+            note = it
+            cardViewResearch.visibility = View.VISIBLE
+            descResearchTV.text = note.description
+            titleResearchTV.text = note.title
+            idDialog = note.id.toString()
 
-            for (doc in querySnapshot){
-                cardViewResearch.visibility = View.VISIBLE
-                idDialog = doc.id
-                doc.getString("title")?.let {
-                    titleResearchTV.text = it
-                }
-                doc.getString("description")?.let {
-                    descResearchTV.text = it
-                }
-                doc.getBoolean("state")?.let {
-                    if(it){
-                        idResearchTV.setButtonDrawable(R.drawable.ic_check_box_black_24dp)
-                    }else{
-                        idResearchTV.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp)
-                    }
-                }
+            if (note.state!!) {
+                idResearchTV.setButtonDrawable(R.drawable.ic_check_box_black_24dp)
+            } else {
+                idResearchTV.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp)
             }
-        }
+        })
+
     }
 
     private fun showToast(){

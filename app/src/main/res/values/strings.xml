@@ -19,7 +19,7 @@
     <string name="activeAlarm">activate Alarm</string>
     <string name="showMap">showMap</string>
     <string name="title_activity_maps">Map</string>
-    <string name="action_notify_task">com.example.realmdb.action.DO</string>
+    <string name="action_notify_task">com.example.appnote.action.DO</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -29,6 +29,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="txtCreateAccount">Doesnt have an account? Type here to create one!</string>
+    <string name="txtCreateAccount">Does not have an account? Type here to create one!</string>
     <string name="btn_log_in">LOG IN</string>
 </resources>

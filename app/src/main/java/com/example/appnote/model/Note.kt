@@ -1,11 +1,7 @@
-package com.example.appnote
+package com.example.appnote.model
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
-
-open class Notes(
-    @PrimaryKey
-    var id: Int? = null,
+data class Note(
+    var id: String?= null,
     var title: String? = null,
     var description:String?=null,
     var day: String? = null,
@@ -14,5 +10,5 @@ open class Notes(
     var hour: String? = null,
     var minute: String? = null,
     var place: String? = null,
-    var image: String? = null
-): RealmObject()
+    var state: Boolean? = false
+)

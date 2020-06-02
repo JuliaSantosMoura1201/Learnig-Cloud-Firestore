@@ -1,9 +1,11 @@
-package com.example.appnote
+package com.example.appnote.view.main
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.appnote.R
+import com.example.appnote.model.Note
 import kotlinx.android.synthetic.main.notes_rv_layout.view.*
 import java.util.ArrayList
 
