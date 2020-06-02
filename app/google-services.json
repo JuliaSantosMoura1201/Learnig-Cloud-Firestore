@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "404662095890",
+    "firebase_url": "https://appnote-fee46.firebaseio.com",
+    "project_id": "appnote-fee46",
+    "storage_bucket": "appnote-fee46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404662095890:android:765948574188bb249548cb",
+        "android_client_info": {
+          "package_name": "com.example.appnote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404662095890-u3q8fdbmp32ccq7n62o0opr2tsu6o4rc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.appnote",
+            "certificate_hash": "32298e7e6799ce84c3c0ca4b0b3f2d16689ee73b"
+          }
+        },
+        {
+          "client_id": "404662095890-abt1mque558g4v8o6elvbosu7s9k74i0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZZKWMY_bUMZGIo6uw9FSkHpTNn72xcDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404662095890-abt1mque558g4v8o6elvbosu7s9k74i0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
