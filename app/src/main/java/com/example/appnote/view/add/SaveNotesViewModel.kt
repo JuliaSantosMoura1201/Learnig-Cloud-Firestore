@@ -14,11 +14,15 @@ class SaveNotesViewModel: ViewModel() {
        return  repository.addNotes(note, filePath)
     }
 
-    fun replaceNote(id: String, note: Note): LiveData<Boolean> {
-        return repository.replaceNotes(id, note)
+    fun replaceNote(id: String, note: Note, filePath: Uri?): LiveData<Boolean> {
+        return repository.replaceNotes(id, note, filePath)
     }
 
     fun getNote(id: String): LiveData<Note>{
         return  repository.getNote(id)
+    }
+
+    fun getImage(name: String): LiveData<ByteArray>{
+        return repository.getImage(name)
     }
 }
