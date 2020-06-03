@@ -56,6 +56,7 @@ class SaveNoteRepository {
                             liveDataResponse.postValue(false)
                         }
                 }
+                liveDataResponse.postValue(true)
 
             }
             .addOnFailureListener {

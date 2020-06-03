@@ -1,23 +1,26 @@
 package com.example.appnote.view.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.appnote.view.login.LoginActivity
+import com.crashlytics.android.Crashlytics
 import com.example.appnote.R
-import com.example.appnote.view.research.ResearchActivity
 import com.example.appnote.model.Note
 import com.example.appnote.view.add.AddNotesActivity
 import com.example.appnote.view.delete.DeleteDialog
+import com.example.appnote.view.login.LoginActivity
+import com.example.appnote.view.research.ResearchActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.ArrayList
+import io.fabric.sdk.android.Fabric
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +46,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, AddNotesActivity::class.java))
             finish()
         }
+
+        Fabric.with(this, Crashlytics())
 
     }
 
