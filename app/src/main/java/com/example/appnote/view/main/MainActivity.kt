@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.deleteOption -> {
-               deleteAll()
+               deleteAllImages()
             }
 
             R.id.researchOption -> {
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    fun deleteRealm(){
+    private fun deleteRealm(){
         viewModel.deleteNote(idDialog).observe(this, Observer {
             if(it){
                 getAllNotes()
@@ -127,10 +127,25 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    fun deleteImage(){
+        viewModel.deleteImage(idDialog).observe(this, Observer {
+            if(it){
+                deleteRealm()
+            }
+        })
+    }
     private fun deleteAll(){
         viewModel.deleteAll().observe(this, Observer {
             if (it){
                 getAllNotes()
+            }
+        })
+    }
+
+    private fun deleteAllImages(){
+        viewModel.deleteAllImages().observe(this, Observer {
+            if (it){
+                deleteAll()
             }
         })
     }

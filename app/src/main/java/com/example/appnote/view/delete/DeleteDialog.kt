@@ -24,7 +24,7 @@ class DeleteDialog: DialogFragment() {
         alertDialog.setTitle("Delete")
         alertDialog.setMessage("Are you sure that you want to delete this note?")
         alertDialog.setPositiveButton("yes") { _, _ ->
-            (activity as MainActivity).deleteRealm()
+            (activity as MainActivity).deleteImage()
             this.dialog?.dismiss()
         }
         alertDialog.setNegativeButton("no"
