@@ -21,8 +21,15 @@ class MainViewModel: ViewModel() {
         return repository.deleteNote(id)
     }
 
+    fun deleteImage(id: String): LiveData<Boolean>{
+        return repository.deleteImage(id)
+    }
     fun deleteAll(): LiveData<Boolean>{
         return repository.deleteAll()
+    }
+
+    fun deleteAllImages(): LiveData<Boolean>{
+        return  repository.deleteAllImages()
     }
 
     fun logOut(){
