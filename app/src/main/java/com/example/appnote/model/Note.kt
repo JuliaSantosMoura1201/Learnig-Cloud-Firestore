@@ -1,5 +1,6 @@
 package com.example.appnote.model
 
+
 data class Note(
     var id: String?= null,
     var title: String? = null,
@@ -10,5 +11,6 @@ data class Note(
     var hour: String? = null,
     var minute: String? = null,
     var place: String? = null,
-    var state: Boolean? = false
+    var state: Boolean? = false,
+    var userEmail: String? = null
 )

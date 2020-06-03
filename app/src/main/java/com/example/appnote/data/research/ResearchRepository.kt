@@ -2,17 +2,21 @@ package com.example.appnote.data.research
 
 import androidx.lifecycle.MutableLiveData
 import com.example.appnote.model.Note
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ResearchRepository {
 
     private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val user: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun makeResearch(type: String, item: String): MutableLiveData<Note> {
 
         val liveDataResponse: MutableLiveData<Note> = MutableLiveData()
 
-        firebaseFirestore.collection("notes").whereEqualTo(type, item)
+        firebaseFirestore.collection("notes")
+            .whereEqualTo("userEmail", user.currentUser?.email)
+            .whereEqualTo(type, item)
             .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if(firebaseFirestoreException != null){
                     return@addSnapshotListener
