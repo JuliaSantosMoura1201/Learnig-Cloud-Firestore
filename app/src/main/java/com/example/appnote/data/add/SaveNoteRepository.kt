@@ -6,7 +6,6 @@ import com.example.appnote.model.Note
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.util.*
 
 class SaveNoteRepository {
 
@@ -22,7 +21,8 @@ class SaveNoteRepository {
         firebaseFirestore.collection("notes")
             .add(note)
             .addOnSuccessListener {
-                val imageRef = storageReference.child(UUID.randomUUID().toString())
+                val name = note.title.plus(note.description).plus(note.day).plus(note.month).plus(note.year)
+                val imageRef = storageReference.child(name)
                 imageRef.putFile(filePath)
                     .addOnSuccessListener {
                         liveDataResponse.postValue(true)
@@ -38,14 +38,25 @@ class SaveNoteRepository {
         return liveDataResponse
     }
 
-    fun replaceNotes(id: String, note: Note): MutableLiveData<Boolean> {
+    fun replaceNotes(id: String, note: Note, filePath: Uri?): MutableLiveData<Boolean> {
 
         val liveDataResponse = MutableLiveData<Boolean>()
         firebaseFirestore.collection("notes")
             .document(id)
             .set(note)
             .addOnSuccessListener {
-               liveDataResponse.postValue(true)
+                val name = note.title.plus(note.description).plus(note.day).plus(note.month).plus(note.year)
+                val imageRef = storageReference.child(name)
+                if(filePath != null){
+                    imageRef.putFile(filePath)
+                        .addOnSuccessListener {
+                            liveDataResponse.postValue(true)
+                        }
+                        .addOnFailureListener{
+                            liveDataResponse.postValue(false)
+                        }
+                }
+
             }
             .addOnFailureListener {
                 liveDataResponse.postValue(false)
@@ -99,6 +110,19 @@ class SaveNoteRepository {
                     liveDataResponse.postValue(note)
                 }
             }
+        return liveDataResponse
+    }
+
+    fun getImage(name: String): MutableLiveData<ByteArray>{
+
+        val liveDataResponse : MutableLiveData<ByteArray> = MutableLiveData()
+        val imageRef = storageReference.child(name)
+        val ONE_MEGABYTE: Long = 1024 * 1024
+
+        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
+            liveDataResponse.postValue(it)
+        }
+
         return liveDataResponse
     }
 }

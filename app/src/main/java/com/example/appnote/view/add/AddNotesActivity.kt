@@ -4,10 +4,13 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.appnote.view.main.MainActivity
@@ -63,6 +66,7 @@ class AddNotesActivity : AppCompatActivity() {
 
         seeMapIV.setOnClickListener   { showMap()             }
         constraint.setOnClickListener { showFileChooser()     }
+        imageNote.setOnClickListener  { showFileChooser()     }
         editDate.setOnClickListener   { displayPickerDialog() }
         editTime.setOnClickListener   { displayTimeDialog()   }
 
@@ -86,7 +90,23 @@ class AddNotesActivity : AppCompatActivity() {
     private fun getNote(){
         viewModel.getNote(id).observe(this, androidx.lifecycle.Observer {
            fillComponents(it)
+            val name = it.title.plus(it.description).plus(it.day).plus(it.month).plus(it.year)
+            getImage(name)
         })
+    }
+
+    private fun getImage(name: String){
+        viewFlipper.displayedChild = viewFlipper.displayedChild + 1
+        viewModel.getImage(name).observe(this, androidx.lifecycle.Observer {
+            val bpm = BitmapFactory.decodeByteArray(it, 0, it.size)
+            imageNote.setImageBitmap(Bitmap.createScaledBitmap(bpm,  getScreenWidth(), 200, false))
+        })
+    }
+
+    private fun getScreenWidth(): Int{
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.widthPixels - 40
     }
 
     private fun fillComponents(note: Note){
@@ -110,7 +130,7 @@ class AddNotesActivity : AppCompatActivity() {
     }
 
     private fun replaceNotes(){
-        viewModel.replaceNote(id, fillNote()).observe(this, androidx.lifecycle.Observer {
+        viewModel.replaceNote(id, fillNote(), filePath).observe(this, androidx.lifecycle.Observer {
             if(it){
                 backMainActivity()
             }else{
@@ -164,7 +184,7 @@ class AddNotesActivity : AppCompatActivity() {
     }
 
     private fun configImageAppearance(){
-        viewFlipper.displayedChild = viewFlipper.displayedChild + 1
+        viewFlipper.displayedChild = 1
         val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
         imageNote.setImageBitmap(bitmap)
     }
