@@ -3,6 +3,7 @@ package com.example.appnote.data.add
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.appnote.model.Note
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -10,6 +11,7 @@ import com.google.firebase.storage.StorageReference
 class SaveNoteRepository {
 
     private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val user: FirebaseAuth = FirebaseAuth.getInstance()
     private var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var storageReference: StorageReference = firebaseStorage.reference
 
@@ -17,6 +19,7 @@ class SaveNoteRepository {
     fun addNotes(note: Note, filePath: Uri): MutableLiveData<Boolean> {
 
         val liveDataResponse = MutableLiveData<Boolean>()
+        note.userEmail = user.currentUser?.email
 
         firebaseFirestore.collection("notes")
             .add(note)
@@ -41,6 +44,8 @@ class SaveNoteRepository {
     fun replaceNotes(id: String, note: Note, filePath: Uri?): MutableLiveData<Boolean> {
 
         val liveDataResponse = MutableLiveData<Boolean>()
+        note.userEmail = user.currentUser?.email
+
         firebaseFirestore.collection("notes")
             .document(id)
             .set(note)
@@ -108,6 +113,11 @@ class SaveNoteRepository {
                        note.minute = it
                     }
 
+                    doc.getBoolean("state")?.let {
+                        note.state = it
+                    }
+
+                    note.userEmail = user.currentUser?.email
                     liveDataResponse.postValue(note)
                 }
             }

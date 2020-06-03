@@ -20,6 +20,7 @@ class MainRepository {
         val list = ArrayList<Note>()
 
         firebaseFirestore.collection("notes")
+            .whereEqualTo("userEmail", user.currentUser?.email)
             .get()
             .addOnSuccessListener{ documents ->
                 for (doc in documents!!){
@@ -88,6 +89,7 @@ class MainRepository {
                         note.state = !it
                     }
 
+                    note.userEmail = user.currentUser?.email
                     firebaseFirestore.collection("notes")
                         .document(id)
                         .set(note)

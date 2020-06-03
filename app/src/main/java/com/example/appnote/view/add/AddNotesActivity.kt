@@ -29,6 +29,7 @@ class AddNotesActivity : AppCompatActivity() {
     private var notificate: Boolean = false
     private var alarm: Boolean = false
     var id= ""
+    var state : Boolean? = false
 
     companion object{
         const val PICK_IMAGE_REQUEST = 1234
@@ -115,6 +116,7 @@ class AddNotesActivity : AppCompatActivity() {
         editPlace.setText(note.place)
         editDate.text = note.day.plus("/").plus(note.month).plus("/").plus(note.year)
         editTime.text = note.hour.plus(":").plus(note.minute)
+        state = note.state
     }
 
     private fun addNotes(){
@@ -153,7 +155,8 @@ class AddNotesActivity : AppCompatActivity() {
             time.substring(0, 2),
             time.substring(3,5),
             editPlace.text.toString(),
-            false
+            state,
+            null
         )
     }
 
