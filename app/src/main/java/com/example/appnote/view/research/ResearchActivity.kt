@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.appnote.R
 import com.example.appnote.model.Note
-import com.example.appnote.view.add.AddNotesActivity
+import com.example.appnote.view.save.SaveNotesActivity
 import kotlinx.android.synthetic.main.activity_research.*
 
 class ResearchActivity : AppCompatActivity() {
@@ -21,7 +21,6 @@ class ResearchActivity : AppCompatActivity() {
     private var idDialog = ""
 
     private lateinit var viewModel: ResearchViewModel
-    private lateinit var note: Note
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +30,17 @@ class ResearchActivity : AppCompatActivity() {
 
         configSpinner()
 
-        btn_search.setOnClickListener { makeResearch() }
+        btn_search.setOnClickListener {validateResearch() }
 
         cardViewResearch.setOnClickListener {goToAddActivity()}
+    }
+
+    private fun validateResearch(){
+        if(viewModel.isResearchValid(edtNote.text.toString())){
+            makeResearch()
+        }else{
+            showToast(R.string.research_empty)
+        }
     }
 
     private fun configSpinner(){
@@ -63,27 +70,38 @@ class ResearchActivity : AppCompatActivity() {
         cardViewResearch.visibility = View.GONE
 
         viewModel.research(type, edtNote.text.toString()).observe(this, Observer {
-            note = it
-            cardViewResearch.visibility = View.VISIBLE
-            descResearchTV.text = note.description
-            titleResearchTV.text = note.title
-            idDialog = note.id.toString()
 
-            if (note.state!!) {
-                idResearchTV.setButtonDrawable(R.drawable.ic_check_box_black_24dp)
-            } else {
-                idResearchTV.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp)
+            if(it.state != null){
+                configAppearance(it)
+            }else{
+                showToast(R.string.invalid_research)
             }
         })
 
     }
 
-    private fun showToast(){
-        Toast.makeText(this, "This item does not exists or is invalid, please try again", Toast.LENGTH_SHORT).show()
+    private fun configAppearance(note: Note){
+        cardViewResearch.visibility = View.VISIBLE
+        descResearchTV.text = note.description
+        titleResearchTV.text = note.title
+        idDialog = note.id.toString()
+        configIcon(note.state!!)
+    }
+
+    private fun configIcon(state: Boolean){
+        if (state) {
+            idResearchTV.setButtonDrawable(R.drawable.ic_check_box_black_24dp)
+        } else {
+            idResearchTV.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp)
+        }
+    }
+
+    private fun showToast(message: Int){
+        Toast.makeText(this, getString(message), Toast.LENGTH_SHORT).show()
     }
 
     private fun goToAddActivity(){
-        val intent = Intent(this, AddNotesActivity::class.java)
+        val intent = Intent(this, SaveNotesActivity::class.java)
         intent.putExtra("id", idDialog)
         startActivity(intent)
     }

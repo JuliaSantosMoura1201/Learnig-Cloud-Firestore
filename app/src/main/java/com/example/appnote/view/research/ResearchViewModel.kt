@@ -12,4 +12,11 @@ class ResearchViewModel: ViewModel() {
     fun research(type: String, item: String): LiveData<Note>{
         return repository.makeResearch(type, item)
     }
+
+    fun isResearchValid(item: String): Boolean {
+        if(item.isEmpty()){
+            return false
+        }
+        return true
+    }
 }

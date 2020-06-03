@@ -11,20 +11,25 @@ class LoginRepository {
 
         val liveDataResponse = MutableLiveData<Boolean>()
 
+        user.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener{ task->
+                if(task.isSuccessful){
+                    liveDataResponse.postValue(true)
+                }else{
+                    liveDataResponse.postValue(false)
+                }
+            }
+
+        return liveDataResponse
+    }
+
+    fun isLogged(): MutableLiveData<Boolean>{
+
+        val liveDataResponse = MutableLiveData<Boolean>(false)
+
         if(user.currentUser != null){
             liveDataResponse.postValue(true)
-            return liveDataResponse
-        }else{
-            user.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener{ task->
-                    if(task.isSuccessful){
-                        liveDataResponse.postValue(true)
-                    }else{
-                        liveDataResponse.postValue(false)
-                    }
-                }
         }
-
 
         return liveDataResponse
     }

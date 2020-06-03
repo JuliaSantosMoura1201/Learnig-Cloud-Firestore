@@ -11,4 +11,22 @@ class LoginViewModel: ViewModel() {
     fun login(email: String ,password: String): LiveData<Boolean>{
        return repository.logIn(email, password)
     }
+
+    fun isLogged(): LiveData<Boolean>{
+        return repository.isLogged()
+    }
+
+    fun isPasswordValid(password: String): Boolean{
+        if(password.isEmpty()){
+            return false
+        }
+        return true
+    }
+
+    fun isEmailValid(email: String): Boolean{
+        if(email.isEmpty()){
+            return false
+        }
+        return true
+    }
 }

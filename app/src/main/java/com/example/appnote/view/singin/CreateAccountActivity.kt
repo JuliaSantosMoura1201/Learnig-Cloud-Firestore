@@ -21,17 +21,31 @@ class CreateAccountActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
 
-        btn_sing_in.setOnClickListener{
-            viewModel.singInState(edit_username.text.toString(), edit_password.text.toString())
-                .observe(this, Observer {
-                    if(it){
-                        goToMain()
-                    }else{
-                        Toast.makeText(this, "Something went wrong, please try again!", Toast.LENGTH_SHORT).show()
-                    }
-                } )
-        }
+        btn_sing_in.setOnClickListener{validateFields()}
 
+    }
+
+    private fun validateFields(){
+        if(viewModel.isEmailValid(edit_username.text.toString())){
+            if(viewModel.isPasswordValid(edit_password.text.toString())){
+                singIn()
+            }else{
+                showToast(R.string.password_too_small)
+            }
+        }else{
+            showToast(R.string.invalid_email)
+        }
+    }
+
+    private fun singIn(){
+        viewModel.singInState(edit_username.text.toString(), edit_password.text.toString())
+            .observe(this, Observer {
+                if(it){
+                    goToMain()
+                }else{
+                    showToast(R.string.general_error)
+                }
+            } )
     }
 
     private fun goToMain(){
@@ -39,5 +53,8 @@ class CreateAccountActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun showToast(text: Int){
+        Toast.makeText(this, getString(text), Toast.LENGTH_SHORT).show()
+    }
 
 }

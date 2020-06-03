@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.crashlytics.android.Crashlytics
 import com.example.appnote.R
 import com.example.appnote.model.Note
-import com.example.appnote.view.add.AddNotesActivity
+import com.example.appnote.view.save.SaveNotesActivity
 import com.example.appnote.view.delete.DeleteDialog
 import com.example.appnote.view.login.LoginActivity
 import com.example.appnote.view.research.ResearchActivity
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         getAllNotes()
 
         addNotes.setOnClickListener {
-            startActivity(Intent(this, AddNotesActivity::class.java))
+            startActivity(Intent(this, SaveNotesActivity::class.java))
             finish()
         }
 
@@ -91,6 +92,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.updateState(idDialog).observe(this, Observer {
             if (it){
                 getAllNotes()
+            }else{
+                showToast()
             }
         })
     }
@@ -128,6 +131,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.deleteNote(idDialog).observe(this, Observer {
             if(it){
                 getAllNotes()
+            }else{
+                showToast()
             }
         })
     }
@@ -136,6 +141,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.deleteImage(idDialog).observe(this, Observer {
             if(it){
                 deleteRealm()
+            }else{
+                showToast()
             }
         })
     }
@@ -143,6 +150,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.deleteAll().observe(this, Observer {
             if (it){
                 getAllNotes()
+            }else{
+                showToast()
             }
         })
     }
@@ -151,6 +160,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.deleteAllImages().observe(this, Observer {
             if (it){
                 deleteAll()
+            }else{
+                showToast()
             }
         })
     }
@@ -162,8 +173,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun goToAddActivity(){
-        val intent = Intent(this@MainActivity, AddNotesActivity::class.java)
+        val intent = Intent(this@MainActivity, SaveNotesActivity::class.java)
         intent.putExtra("id", idDialog)
         startActivity(intent)
+    }
+
+    private fun showToast(){
+        Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
     }
 }

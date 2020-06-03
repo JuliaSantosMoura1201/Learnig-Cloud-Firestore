@@ -23,7 +23,8 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        login.setOnClickListener { login() }
+        isLogged()
+        login.setOnClickListener { validateFields() }
 
         underlineComponent()
 
@@ -33,12 +34,32 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun validateFields(){
+        if(viewModel.isEmailValid(username.text.toString())){
+            if(viewModel.isPasswordValid(password.text.toString())){
+                login()
+            }else{
+                showToast(R.string.invalid_password)
+            }
+        }else{
+            showToast(R.string.invalid_email)
+        }
+    }
+
+    private fun isLogged(){
+        viewModel.isLogged().observe(this, Observer {
+            if(it){
+                goToMain()
+            }
+        })
+    }
+
     private fun login(){
         viewModel.login(username.text.toString(), password.text.toString()).observe(this, Observer {
             if(it){
                 goToMain()
             }else{
-                showToast()
+                showToast(R.string.general_error)
             }
         })
     }
@@ -58,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
         txt_create_account.text = content
     }
 
-    private fun showToast(){
-        Toast.makeText(this, "Something went wrong, please try again!", Toast.LENGTH_SHORT).show()
+    private fun showToast(text: Int){
+        Toast.makeText(this, getString(text), Toast.LENGTH_SHORT).show()
     }
 }

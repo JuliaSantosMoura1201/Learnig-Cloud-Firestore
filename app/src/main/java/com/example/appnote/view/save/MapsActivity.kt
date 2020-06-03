@@ -1,4 +1,4 @@
-package com.example.appnote.view.add
+package com.example.appnote.view.save
 
 import android.content.Context
 import android.location.Address

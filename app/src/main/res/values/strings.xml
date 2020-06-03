@@ -1,34 +1,49 @@
 <resources>
     <string name="app_name">AppNote</string>
-    <string name="txt_id">1</string>
+    <string name="general_error">Something went wrong, please try again</string>
+    <string name="action_notify_task">com.example.appnote.action.DO</string>
+
+    <!--Menu-->
     <string name="btn_delete_all">Delete All</string>
     <string name="btn_research">Research note</string>
     <string name="btn_sign_out">Sign Out</string>
-    <string name="hint_search">Type here what you are looking for</string>
-    <string name="btn_search">Search</string>
+
+    <!--Main-->
     <string name="hint_title">Title</string>
     <string name="hint_description">Description</string>
-    <string name="btn_edit">Edit</string>
+
+    <!--Login-->
+    <string name="prompt_password">Password</string>
+    <string name="prompt_email">Email</string>
+    <string name="txtCreateAccount">Does not have an account? Type here to create one!</string>
+    <string name="invalid_password">Password can not be empty</string>
+    <string name="invalid_email">Email can not be empty</string>
+    <string name="btn_log_in">LOG IN</string>
+
+    <!--SingIn-->
+    <string name="action_sign_in">Sign in</string>
+    <string name="password_too_small">Password must have at least 6 characters</string>
+
+    <!--Research-->
+    <string name="research_empty">This item can not be empty</string>
+    <string name="invalid_research">This item does not exists or is invalid, please try again</string>
+    <string name="hint_search">Type here what you are looking for</string>
+    <string name="btn_search">Search</string>
+
+    <!--Save Note-->
+    <string name="invalid_date">This date is in the past</string>
+    <string name="image_empty">An image must be choose</string>
+    <string name="title_empty">A title must be choose</string>
+    <string name="description_empty">A description must be choose</string>
     <string name="cd_image">Choose image</string>
     <string name="btn_save_notes">Save Notes</string>
     <string name="hint_date">Date</string>
-    <string name="switch_remember">Remember me</string>
     <string name="hint_time">Time</string>
     <string name="hint_place">Address</string>
     <string name="activateAlert">Activate Alert</string>
     <string name="activeAlarm">activate Alarm</string>
     <string name="showMap">showMap</string>
+
+    <!--Maps-->
     <string name="title_activity_maps">Map</string>
-    <string name="action_notify_task">com.example.appnote.action.DO</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
-    <string name="txtCreateAccount">Does not have an account? Type here to create one!</string>
-    <string name="btn_log_in">LOG IN</string>
 </resources>
