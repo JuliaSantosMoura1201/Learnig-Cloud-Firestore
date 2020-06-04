@@ -6,10 +6,11 @@ import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.crashlytics.android.Crashlytics
 import com.example.appnote.R
@@ -18,15 +19,15 @@ import com.example.appnote.view.save.SaveNotesActivity
 import com.example.appnote.view.delete.DeleteDialog
 import com.example.appnote.view.login.LoginActivity
 import com.example.appnote.view.research.ResearchActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import io.fabric.sdk.android.Fabric
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var addNotes: FloatingActionButton
-    private lateinit var notesRV: RecyclerView
     private var notesList = ArrayList<Note>()
     var idDialog = ""
     val deleteDialog= DeleteDialog.newInstance(this)
@@ -36,11 +37,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
 
-        addNotes = findViewById(R.id.addNotes)
-        notesRV = findViewById(R.id.notesRV)
 
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        nav_view.setNavigationItemSelectedListener(this)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         getAllNotes()
 
         addNotes.setOnClickListener {
@@ -114,14 +120,6 @@ class MainActivity : AppCompatActivity() {
             R.id.deleteOption -> {
                deleteAllImages()
             }
-
-            R.id.researchOption -> {
-                startActivity(Intent(this, ResearchActivity::class.java))
-            }
-            else -> {
-                viewModel.logOut()
-                goToLogin()
-            }
         }
 
         return true
@@ -180,5 +178,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(){
         Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+
+            R.id.nav_research -> {
+                startActivity(Intent(this, ResearchActivity::class.java))
+            }
+            R.id.nav_logout -> {
+                viewModel.logOut()
+                goToLogin()
+            }
+            R.id.nav_update -> {
+                Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_customize -> {
+                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+            }
+        }
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
     }
 }

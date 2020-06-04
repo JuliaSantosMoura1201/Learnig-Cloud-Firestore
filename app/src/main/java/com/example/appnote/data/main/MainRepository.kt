@@ -116,38 +116,13 @@ class MainRepository {
     fun deleteImage(id: String): MutableLiveData<Boolean>{
         val liveDataResponse = MutableLiveData<Boolean>()
 
-        firebaseFirestore.collection("notes")
-            .document(id)
-            .get()
-            .addOnSuccessListener {doc ->
-                val note = Note()
-                doc.getString("title")?.let {
-                    note.title = it
-                }
-                doc.getString("description")?.let {
-                    note.description = it
-                }
-                doc.getString("year")?.let {
-                    note.year = it
-                }
-
-                doc.getString("month")?.let {
-                    note.month = it
-                }
-
-                doc.getString("day")?.let {
-                    note.day = it
-                }
-
-                val name = note.title.plus(note.description).plus(note.day).plus(note.month).plus(note.year)
-                val imageRef = storageReference.child(name)
-                imageRef.delete()
-                    .addOnSuccessListener {
-                        liveDataResponse.postValue(true)
-                    }
-                    .addOnFailureListener{
-                        liveDataResponse.postValue(false)
-                    }
+        val imageRef = storageReference.child(id)
+        imageRef.delete()
+            .addOnSuccessListener {
+                liveDataResponse.postValue(true)
+            }
+            .addOnFailureListener{
+                liveDataResponse.postValue(false)
             }
 
         return liveDataResponse
@@ -187,28 +162,8 @@ class MainRepository {
                     firebaseFirestore.collection("notes")
                         .document(doc.id)
                         .get()
-                        .addOnSuccessListener {document ->
-                            val note = Note()
-                            document.getString("title")?.let {
-                                note.title = it
-                            }
-                            document.getString("description")?.let {
-                                note.description = it
-                            }
-                            document.getString("year")?.let {
-                                note.year = it
-                            }
-
-                            document.getString("month")?.let {
-                                note.month = it
-                            }
-
-                            document.getString("day")?.let {
-                                note.day = it
-                            }
-
-                            val name = note.title.plus(note.description).plus(note.day).plus(note.month).plus(note.year)
-                            val imageRef = storageReference.child(name)
+                        .addOnSuccessListener {
+                            val imageRef = storageReference.child(doc.id)
                             imageRef.delete()
                                 .addOnSuccessListener {
                                     liveDataResponse.postValue(true)

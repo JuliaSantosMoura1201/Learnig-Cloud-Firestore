@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group>
+        <item
+            android:id="@+id/nav_research"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/btn_research"/>
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_directions_run_black_24dp"
+            android:title="@string/btn_sign_out"/>
+    </group>
+
+
+    <item android:title="@string/title_settings">
+        <menu>
+            <item
+                android:id="@+id/nav_update"
+                android:icon="@drawable/ic_account_circle_black_24dp"
+                android:title="@string/btn_update_profile"/>
+            <item
+                android:id="@+id/nav_customize"
+                android:icon="@drawable/ic_color_lens_black_24dp"
+                android:title="@string/btn_change_appearance"/>
+        </menu>
+    </item>
+</menu>

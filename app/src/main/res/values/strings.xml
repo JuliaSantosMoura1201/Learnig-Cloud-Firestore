@@ -6,7 +6,10 @@
     <!--Menu-->
     <string name="btn_delete_all">Delete All</string>
     <string name="btn_research">Research note</string>
-    <string name="btn_sign_out">Sign Out</string>
+    <string name="btn_sign_out">Log Out</string>
+    <string name="btn_update_profile">Update profile</string>
+    <string name="btn_change_appearance">Customize app</string>
+    <string name="title_settings">Settings</string>
 
     <!--Main-->
     <string name="hint_title">Title</string>
@@ -59,4 +62,6 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="home_second">Home Second</string>
+    <string name="cd_profile_photo">Profile photo</string>
+    <string name="txt_name">Name</string>
 </resources>
