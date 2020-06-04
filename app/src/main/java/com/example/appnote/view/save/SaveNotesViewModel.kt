@@ -11,8 +11,12 @@ class SaveNotesViewModel: ViewModel() {
 
     private val repository: SaveNoteRepository = SaveNoteRepository()
 
-    fun addNote(note: Note, filePath: Uri): LiveData<Boolean> {
-        return repository.addNotes(note, filePath)
+    fun addNote(note: Note): LiveData<String> {
+        return repository.addNotes(note)
+    }
+
+    fun addImage(id: String, filePath: Uri): LiveData<Boolean>{
+        return repository.addImage(id, filePath)
     }
 
     fun replaceNote(id: String, note: Note, filePath: Uri?): LiveData<Boolean> {

@@ -4,12 +4,4 @@
     <item
         android:id="@+id/deleteOption"
         android:title="@string/btn_delete_all" />
-
-    <item
-        android:id="@+id/researchOption"
-        android:title="@string/btn_research"/>
-
-    <item
-        android:id="@+id/signOutOption"
-        android:title="@string/btn_sign_out"/>
 </menu>

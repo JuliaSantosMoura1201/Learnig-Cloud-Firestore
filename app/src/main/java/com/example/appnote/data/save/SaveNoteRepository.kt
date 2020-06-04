@@ -16,25 +16,31 @@ class SaveNoteRepository {
     private var storageReference: StorageReference = firebaseStorage.reference
 
 
-    fun addNotes(note: Note, filePath: Uri): MutableLiveData<Boolean> {
+    fun addNotes(note: Note): MutableLiveData<String> {
 
-        val liveDataResponse = MutableLiveData<Boolean>()
+        val liveDataResponse = MutableLiveData<String>()
         note.userEmail = user.currentUser?.email
 
         firebaseFirestore.collection("notes")
             .add(note)
             .addOnSuccessListener {
-                val name = note.title.plus(note.description).plus(note.day).plus(note.month).plus(note.year)
-                val imageRef = storageReference.child(name)
-                imageRef.putFile(filePath)
-                    .addOnSuccessListener {
-                        liveDataResponse.postValue(true)
-                    }
-                    .addOnFailureListener{
-                        liveDataResponse.postValue(false)
-                    }
+                liveDataResponse.postValue(it.id)
             }
             .addOnFailureListener {
+                liveDataResponse.postValue("")
+            }
+
+        return liveDataResponse
+    }
+
+    fun addImage(id: String, filePath: Uri): MutableLiveData<Boolean>{
+        val liveDataResponse = MutableLiveData<Boolean>()
+        val imageRef = storageReference.child(id)
+        imageRef.putFile(filePath)
+            .addOnSuccessListener {
+                liveDataResponse.postValue(true)
+            }
+            .addOnFailureListener{
                 liveDataResponse.postValue(false)
             }
 
@@ -50,8 +56,7 @@ class SaveNoteRepository {
             .document(id)
             .set(note)
             .addOnSuccessListener {
-                val name = note.title.plus(note.description).plus(note.day).plus(note.month).plus(note.year)
-                val imageRef = storageReference.child(name)
+                val imageRef = storageReference.child(id)
                 if(filePath != null){
                     imageRef.putFile(filePath)
                         .addOnSuccessListener {
