@@ -1,6 +1,8 @@
 package com.example.appnote.view.research
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,7 +10,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.appnote.R
@@ -27,8 +28,9 @@ class ResearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        configSharedPreferences()
         setContentView(R.layout.activity_research)
-        //setSupportActionBar(toolbar)
 
         viewModel = ViewModelProvider(this).get(ResearchViewModel::class.java)
 
@@ -38,9 +40,6 @@ class ResearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         cardViewResearch.setOnClickListener {goToAddActivity()}
 
-       /* val toggle = ActionBarDrawerToggle(this, drawer_layout_research, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout_research.setDrawerListener(toggle)
-        toggle.syncState()*/
     }
 
     private fun validateResearch(){
@@ -116,5 +115,16 @@ class ResearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return true
+    }
+
+    private fun configSharedPreferences(){
+        val sharedPreferences: SharedPreferences = getSharedPreferences("ThemePref", Context.MODE_PRIVATE)
+        val themeKey = "currentTheme"
+
+        when(sharedPreferences.getString(themeKey, "pattern")){
+            "optionYellow" -> theme.applyStyle(R.style.OverlayThemeYellow, true)
+            "optionPurple" -> theme.applyStyle(R.style.OverlayThemePurple, true)
+            "pattern" -> theme.applyStyle(R.style.OverlayThemeLine, true)
+        }
     }
 }
