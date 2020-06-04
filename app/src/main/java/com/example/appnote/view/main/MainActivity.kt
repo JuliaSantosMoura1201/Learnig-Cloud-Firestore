@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun fieldComponents(){
         viewModel.updateState(idDialog).observe(this, Observer {
             if (it){
-                getAllNotes()
+                restartActivity()
             }else{
                 showToast()
             }
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun deleteRealm(){
         viewModel.deleteNote(idDialog).observe(this, Observer {
             if(it){
-                getAllNotes()
+                restartActivity()
             }else{
                 showToast()
             }
@@ -217,5 +217,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             "optionPurple" -> theme.applyStyle(R.style.OverlayThemePurpleMain, true)
             "pattern" -> theme.applyStyle(R.style.OverlayThemeLineMain, true)
         }
+    }
+
+    private fun  restartActivity(){
+        val intent = intent
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        finish()
+        startActivity(intent)
     }
 }

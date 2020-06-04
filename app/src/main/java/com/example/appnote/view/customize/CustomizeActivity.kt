@@ -43,12 +43,6 @@ class CustomizeActivity : AppCompatActivity() {
             "pattern" -> theme.applyStyle(R.style.OverlayThemeLine, true)
         }
     }
-    private fun  restartActivity(){
-        val intent = intent
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        finish()
-        startActivity(intent)
-    }
 
     private fun saveAndGoToMain(){
         sharedPreferences.edit().putString(themeKey, option).apply()
