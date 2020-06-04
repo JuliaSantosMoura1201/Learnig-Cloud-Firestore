@@ -21,6 +21,7 @@ import com.example.appnote.view.customize.CustomizeActivity
 import com.example.appnote.view.save.SaveNotesActivity
 import com.example.appnote.view.delete.DeleteDialog
 import com.example.appnote.view.login.LoginActivity
+import com.example.appnote.view.pockemon.PokemonActivity
 import com.example.appnote.view.research.ResearchActivity
 import com.google.android.material.navigation.NavigationView
 import io.fabric.sdk.android.Fabric
@@ -190,7 +191,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_research -> {
                 startActivity(Intent(this, ResearchActivity::class.java))
-                finish()
+            }
+            R.id.nav_tips -> {
+                startActivity(Intent(this, PokemonActivity::class.java))
             }
             R.id.nav_logout -> {
                 viewModel.logOut()

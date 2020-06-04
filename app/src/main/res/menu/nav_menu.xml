@@ -9,6 +9,11 @@
             android:title="@string/btn_research"/>
 
         <item
+            android:id="@+id/nav_tips"
+            android:icon="@drawable/ic_assignment_black_24dp"
+            android:title="@string/btn_tips"/>
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_directions_run_black_24dp"
             android:title="@string/btn_sign_out"/>
