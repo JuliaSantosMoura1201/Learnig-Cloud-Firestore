@@ -67,4 +67,5 @@
     <!--Customize-->
     <string name="title_customize">Choose your app colors</string>
     <string name="btn_save_color">SAVE</string>
+    <string name="cd_app_icon">Ícone do aplicativo</string>
 </resources>

@@ -22,15 +22,4 @@ class LoginRepository {
 
         return liveDataResponse
     }
-
-    fun isLogged(): MutableLiveData<Boolean>{
-
-        val liveDataResponse = MutableLiveData<Boolean>(false)
-
-        if(user.currentUser != null){
-            liveDataResponse.postValue(true)
-        }
-
-        return liveDataResponse
-    }
 }

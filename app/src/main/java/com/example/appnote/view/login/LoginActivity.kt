@@ -27,7 +27,6 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        isLogged()
         login.setOnClickListener { validateFields() }
 
         underlineComponent()
@@ -48,14 +47,6 @@ class LoginActivity : AppCompatActivity() {
         }else{
             showToast(R.string.invalid_email)
         }
-    }
-
-    private fun isLogged(){
-        viewModel.isLogged().observe(this, Observer {
-            if(it){
-                goToMain()
-            }
-        })
     }
 
     private fun login(){
