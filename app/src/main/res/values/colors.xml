@@ -2,5 +2,14 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#6200EE</color>
+    <color name="colorAccent">@android:color/holo_red_light</color>
+    <color name="colorDetails">@android:color/holo_red_light</color>
+
+    <color name="colorDark1">#8F1A42</color>
+    <color name="colorPrimary1">#AA2250</color>
+    <color name="colorDetails1">#74BE8F</color>
+
+    <color name="colorDark2">#FFEB3B</color>
+    <color name="colorPrimary2">#FDF28E</color>
+    <color name="colorDetail2">#480853</color>
 </resources>

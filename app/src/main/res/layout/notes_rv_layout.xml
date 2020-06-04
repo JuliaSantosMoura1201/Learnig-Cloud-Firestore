@@ -43,7 +43,6 @@
             android:layout_height="wrap_content"
             android:button="@drawable/ic_check_box_outline_blank_black_24dp"
             android:padding="10dp"
-            android:textColor="@android:color/holo_red_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

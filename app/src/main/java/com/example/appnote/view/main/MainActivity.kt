@@ -1,6 +1,8 @@
 package com.example.appnote.view.main
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.crashlytics.android.Crashlytics
 import com.example.appnote.R
 import com.example.appnote.model.Note
+import com.example.appnote.view.customize.CustomizeActivity
 import com.example.appnote.view.save.SaveNotesActivity
 import com.example.appnote.view.delete.DeleteDialog
 import com.example.appnote.view.login.LoginActivity
@@ -36,6 +39,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        configSharedPreferences()
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
@@ -185,6 +190,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.nav_research -> {
                 startActivity(Intent(this, ResearchActivity::class.java))
+                finish()
             }
             R.id.nav_logout -> {
                 viewModel.logOut()
@@ -194,10 +200,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_customize -> {
-                Toast.makeText(this, "Sign out clicked", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, CustomizeActivity::class.java))
+                finish()
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun configSharedPreferences(){
+        val sharedPreferences: SharedPreferences = getSharedPreferences("ThemePref", Context.MODE_PRIVATE)
+        val themeKey = "currentTheme"
+
+        when(sharedPreferences.getString(themeKey, "pattern")){
+            "optionYellow" -> theme.applyStyle(R.style.OverlayThemeYellowMain, true)
+            "optionPurple" -> theme.applyStyle(R.style.OverlayThemePurpleMain, true)
+            "pattern" -> theme.applyStyle(R.style.OverlayThemeLineMain, true)
+        }
     }
 }

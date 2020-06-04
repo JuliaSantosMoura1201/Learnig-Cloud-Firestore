@@ -13,4 +13,39 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="OverlayThemeLine" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorDetails</item>
+    </style>
+
+    <style name="OverlayThemeLineMain" parent="AppTheme">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorDetails</item>
+    </style>
+
+    <style name="OverlayThemePurpleMain" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/colorDark1</item>
+        <item name="colorPrimaryDark">@color/colorPrimary1</item>
+        <item name="colorAccent">@color/colorDetails1</item>
+    </style>
+
+    <style name="OverlayThemePurple" parent="AppTheme">
+        <item name="colorPrimary">@color/colorDark1</item>
+        <item name="colorPrimaryDark">@color/colorPrimary1</item>
+        <item name="colorAccent">@color/colorDetails1</item>
+    </style>
+
+    <style name="OverlayThemeYellowMain" parent="AppTheme.NoActionBar">
+        <item name="colorPrimary">@color/colorDark2</item>
+        <item name="colorPrimaryDark">@color/colorPrimary2</item>
+        <item name="colorAccent">@color/colorDetail2</item>
+    </style>
+
+    <style name="OverlayThemeYellow" parent="AppTheme">
+        <item name="colorPrimary">@color/colorDark2</item>
+        <item name="colorPrimaryDark">@color/colorPrimary2</item>
+        <item name="colorAccent">@color/colorDetail2</item>
+    </style>
 </resources>

@@ -10,6 +10,12 @@
     <string name="btn_update_profile">Update profile</string>
     <string name="btn_change_appearance">Customize app</string>
     <string name="title_settings">Settings</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="home_second">Home Second</string>
+    <string name="cd_profile_photo">Profile photo</string>
+    <string name="txt_name">Name</string>
 
     <!--Main-->
     <string name="hint_title">Title</string>
@@ -57,11 +63,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
 
-    <string name="home_second">Home Second</string>
-    <string name="cd_profile_photo">Profile photo</string>
-    <string name="txt_name">Name</string>
+    <!--Customize-->
+    <string name="title_customize">Choose your app colors</string>
+    <string name="btn_save_color">SAVE</string>
 </resources>

@@ -48,7 +48,7 @@
         android:layout_marginBottom="40dp"
         android:foregroundGravity="center"
         app:srcCompat="@drawable/ic_add_"
-        app:backgroundTint="@android:color/holo_red_light"
+        app:backgroundTint="?colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

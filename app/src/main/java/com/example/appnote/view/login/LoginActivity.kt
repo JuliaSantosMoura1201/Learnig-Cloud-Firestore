@@ -1,6 +1,8 @@
 package com.example.appnote.view.login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableString
@@ -19,6 +21,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        configSharedPreferences()
         setContentView(R.layout.activity_login)
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
@@ -66,11 +70,13 @@ class LoginActivity : AppCompatActivity() {
     private fun goToMain(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun goToCreateAccount(){
         val intent = Intent(this, CreateAccountActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun underlineComponent() {
@@ -81,5 +87,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showToast(text: Int){
         Toast.makeText(this, getString(text), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun configSharedPreferences(){
+        val sharedPreferences: SharedPreferences = getSharedPreferences("ThemePref", Context.MODE_PRIVATE)
+        val themeKey = "currentTheme"
+
+        when(sharedPreferences.getString(themeKey, "pattern")){
+            "optionYellow" -> theme.applyStyle(R.style.OverlayThemeYellow, true)
+            "optionPurple" -> theme.applyStyle(R.style.OverlayThemePurple, true)
+            "pattern" -> theme.applyStyle(R.style.OverlayThemeLine, true)
+        }
     }
 }
