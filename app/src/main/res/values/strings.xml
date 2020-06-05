@@ -70,4 +70,7 @@
     <string name="btn_save_color">SAVE</string>
     <string name="cd_app_icon">Ícone do aplicativo</string>
     <string name="cd_pokemon">Pokemon</string>
+    <string name="hint_name">Name</string>
+    <string name="cv_profile_photo">Profile Photo</string>
+    <string name="updatePassword">Send a password reset email</string>
 </resources>

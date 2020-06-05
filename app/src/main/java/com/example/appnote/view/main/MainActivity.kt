@@ -3,10 +3,15 @@ package com.example.appnote.view.main
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +28,7 @@ import com.example.appnote.view.delete.DeleteDialog
 import com.example.appnote.view.login.LoginActivity
 import com.example.appnote.view.pockemon.PokemonActivity
 import com.example.appnote.view.research.ResearchActivity
+import com.example.appnote.view.updateProfile.UpdateProfileActivity
 import com.google.android.material.navigation.NavigationView
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var notesList = ArrayList<Note>()
     var idDialog = ""
     val deleteDialog= DeleteDialog.newInstance(this)
-
+    private lateinit var v : View
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,11 +55,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
-
         nav_view.setNavigationItemSelectedListener(this)
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        v = nav_view.getHeaderView(0)
 
         getAllNotes()
+        getUser()
+        getImage()
 
         addNotes.setOnClickListener {
             startActivity(Intent(this, SaveNotesActivity::class.java))
@@ -131,7 +140,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun deleteRealm(){
+    private fun deleteNote(){
         viewModel.deleteNote(idDialog).observe(this, Observer {
             if(it){
                 restartActivity()
@@ -144,7 +153,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun deleteImage(){
         viewModel.deleteImage(idDialog).observe(this, Observer {
             if(it){
-                deleteRealm()
+                deleteNote()
             }else{
                 showToast()
             }
@@ -200,7 +209,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 goToLogin()
             }
             R.id.nav_update -> {
-                Toast.makeText(this, "Update clicked", Toast.LENGTH_SHORT).show()
+               startActivity(Intent(this, UpdateProfileActivity::class.java))
             }
             R.id.nav_customize -> {
                 startActivity(Intent(this, CustomizeActivity::class.java))
@@ -227,5 +236,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         finish()
         startActivity(intent)
+    }
+
+    private fun getUser(){
+        val name = v.findViewById<TextView>(R.id.txtName)
+        val email = v.findViewById<TextView>(R.id.txtEmail)
+
+        viewModel.getUser().observe(this, Observer {
+            name.text = it.name
+            email.text = it.email
+        })
+    }
+
+    private fun getImage(){
+        val img = v.findViewById<ImageView>(R.id.ivPersonIcon)
+
+        viewModel.getImage().observe(this, Observer {
+            val bpm = BitmapFactory.decodeByteArray(it, 0, it.size)
+            img.setImageBitmap(Bitmap.createScaledBitmap(bpm,  140, 140, false))
+        })
     }
 }

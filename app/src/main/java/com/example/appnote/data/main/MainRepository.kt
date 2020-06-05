@@ -2,6 +2,7 @@ package com.example.appnote.data.main
 
 import androidx.lifecycle.MutableLiveData
 import com.example.appnote.model.Note
+import com.example.appnote.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -175,6 +176,48 @@ class MainRepository {
                 }
             }
             .addOnFailureListener { liveDataResponse.postValue(false) }
+        return liveDataResponse
+    }
+
+    fun getUser(): MutableLiveData<User>{
+        val liveDataResponse : MutableLiveData<User> = MutableLiveData()
+
+        firebaseFirestore.collection("user")
+            .whereEqualTo("email", user.currentUser?.email)
+            .addSnapshotListener { querySnapshot, _ ->
+
+                if(querySnapshot != null){
+                    for (doc in querySnapshot){
+                        val user = User("", "")
+
+                        doc.getString("name")?.let {
+                            user.name = it
+                        }
+
+                        doc.getString("email")?.let {
+                            user.email = it
+                        }
+
+                        liveDataResponse.postValue(user)
+                    }
+                }
+
+            }
+
+        return  liveDataResponse
+    }
+
+    fun getImage(): MutableLiveData<ByteArray>{
+
+        val liveDataResponse : MutableLiveData<ByteArray> = MutableLiveData()
+        val id = user.currentUser?.email
+        val imageRef = storageReference.child(id!!)
+        val ONE_MEGABYTE: Long = 1024 * 1024
+
+        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener {
+            liveDataResponse.postValue(it)
+        }
+
         return liveDataResponse
     }
 

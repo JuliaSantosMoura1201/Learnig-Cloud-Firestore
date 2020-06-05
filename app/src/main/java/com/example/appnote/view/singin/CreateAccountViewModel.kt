@@ -1,8 +1,10 @@
 package com.example.appnote.view.singin
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.appnote.data.singin.SingInRepository
+import com.example.appnote.model.User
 
 class CreateAccountViewModel: ViewModel() {
 
@@ -26,5 +28,13 @@ class CreateAccountViewModel: ViewModel() {
             return false
         }
         return true
+    }
+
+    fun saveUser(user: User): LiveData<String>{
+        return repository.saveUser(user)
+    }
+
+    fun saveProfilePhoto(id: String, filePath: Uri): LiveData<Boolean>{
+        return repository.saveProfilePhoto(id, filePath)
     }
 }

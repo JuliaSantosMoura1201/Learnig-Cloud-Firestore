@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.appnote.data.main.MainRepository
 import com.example.appnote.model.Note
+import com.example.appnote.model.User
 
 class MainViewModel: ViewModel() {
 
@@ -32,6 +33,13 @@ class MainViewModel: ViewModel() {
         return  repository.deleteAllImages()
     }
 
+    fun getUser(): LiveData<User>{
+        return repository.getUser()
+    }
+
+    fun getImage(): LiveData<ByteArray>{
+        return  repository.getImage()
+    }
     fun logOut(){
         repository.logOut()
     }

@@ -1,6 +1,8 @@
 package com.example.appnote.view.splash
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -18,6 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        configSharedPreferences()
         window.requestFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_splash_screen)
@@ -37,5 +40,16 @@ class SplashScreenActivity : AppCompatActivity() {
 
 
         }, 4000)
+    }
+
+    private fun configSharedPreferences(){
+        val sharedPreferences: SharedPreferences = getSharedPreferences("ThemePref", Context.MODE_PRIVATE)
+        val themeKey = "currentTheme"
+
+        when(sharedPreferences.getString(themeKey, "pattern")){
+            "optionYellow" -> theme.applyStyle(R.style.OverlayThemeYellowMain, true)
+            "optionPurple" -> theme.applyStyle(R.style.OverlayThemePurpleMain, true)
+            "pattern" -> theme.applyStyle(R.style.OverlayThemeLineMain, true)
+        }
     }
 }
