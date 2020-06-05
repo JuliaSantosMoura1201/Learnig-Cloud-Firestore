@@ -25,7 +25,7 @@
     <!--Login-->
     <string name="prompt_password">Password</string>
     <string name="prompt_email">Email</string>
-    <string name="txtCreateAccount">Does not have an account? Type here to create one!</string>
+    <string name="txtCreateAccount">Does not have an account? Type here to create one and start enjoy AppNote</string>
     <string name="invalid_password">Password can not be empty</string>
     <string name="invalid_email">Email can not be empty</string>
     <string name="btn_log_in">LOG IN</string>

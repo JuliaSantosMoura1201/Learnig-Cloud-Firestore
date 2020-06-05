@@ -252,8 +252,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val img = v.findViewById<ImageView>(R.id.ivPersonIcon)
 
         viewModel.getImage().observe(this, Observer {
-            val bpm = BitmapFactory.decodeByteArray(it, 0, it.size)
-            img.setImageBitmap(Bitmap.createScaledBitmap(bpm,  140, 140, false))
+            if(it != null){
+                val bpm = BitmapFactory.decodeByteArray(it, 0, it.size)
+                img.setImageBitmap(Bitmap.createScaledBitmap(bpm,  140, 140, false))
+            }
         })
     }
 }

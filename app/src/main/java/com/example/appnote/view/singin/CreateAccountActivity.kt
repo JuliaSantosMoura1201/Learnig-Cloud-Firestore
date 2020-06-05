@@ -8,12 +8,16 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.appnote.R
 import com.example.appnote.model.User
 import com.example.appnote.view.main.MainActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_create_account.*
 import java.io.IOException
@@ -21,6 +25,8 @@ import java.io.IOException
 class CreateAccountActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CreateAccountViewModel
+    private lateinit var googleSignInClient: GoogleSignInClient
+    val RC_SIGN_IN: Int = 1
     private var filePath: Uri? = null
     companion object{
         const val PICK_IMAGE_REQUEST = 1234
@@ -34,9 +40,17 @@ class CreateAccountActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(CreateAccountViewModel::class.java)
 
+        googleSignInClient = viewModel.configureGoogleSignIn(getString(R.string.default_web_client_id), this)!!
         btn_sing_in.setOnClickListener{validateFields()}
 
         ivProfilePhoto.setOnClickListener { showFileChooser() }
+
+        googleSignInButton.setOnClickListener { signIn() }
+    }
+
+    private fun signIn(){
+        val signInIntent: Intent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     private fun validateFields(){
@@ -94,6 +108,14 @@ class CreateAccountActivity : AppCompatActivity() {
 
     }
 
+    private fun saveGoogleUser(){
+        viewModel.saveGoogleUser().observe(this, Observer {
+            if (it){
+                goToMain()
+            }
+        })
+    }
+
     private fun saveProfileImage(id: String){
         if(filePath != null){
             viewModel.saveProfilePhoto(id, filePath!!).observe(this, Observer {
@@ -123,6 +145,21 @@ class CreateAccountActivity : AppCompatActivity() {
                 configImageAppearance()
             }catch (e: IOException){
                 e.printStackTrace()
+            }
+        }
+        if(requestCode == RC_SIGN_IN){
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    viewModel.firebaseAuthWithGoogle(account).observe(this, Observer {
+                        if(it){
+                           saveGoogleUser()
+                        }
+                    })
+                }
+            }catch (e: ApiException){
+                showToast(R.string.general_error)
             }
         }
     }

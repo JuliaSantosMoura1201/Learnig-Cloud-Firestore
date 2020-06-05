@@ -12,5 +12,7 @@ data class Note(
     var minute: String? = null,
     var place: String? = null,
     var state: Boolean? = false,
-    var userEmail: String? = null
+    var userEmail: String? = null,
+    var notificationOn: Boolean? = false,
+    var alarmOn: Boolean? = false
 )

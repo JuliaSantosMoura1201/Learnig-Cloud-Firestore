@@ -1,9 +1,15 @@
 package com.example.appnote.data.singin
 
+import android.app.Activity
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.example.appnote.model.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -61,6 +67,47 @@ class SingInRepository {
             .addOnFailureListener{
                 liveDataResponse.postValue(false)
             }
+
+        return liveDataResponse
+    }
+
+    fun configureGoogleSignIn(token: String, activity: Activity): GoogleSignInClient? {
+        val mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(token)
+            .requestEmail()
+            .build()
+        return  GoogleSignIn.getClient(activity, mGoogleSignInOptions)
+    }
+
+    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount): MutableLiveData<Boolean> {
+        val liveDataResponse = MutableLiveData<Boolean>(false)
+        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+
+        user.signInWithCredential(credential)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    liveDataResponse.postValue(true)
+                }
+            }
+
+        return liveDataResponse
+    }
+
+    fun saveGoogleUser(): MutableLiveData<Boolean>{
+
+        val liveDataResponse = MutableLiveData<Boolean>(false)
+        val  name = user.currentUser?.displayName
+        val email = user.currentUser?.email
+        val uri = user.currentUser?.photoUrl
+
+        if (name != null && email != null && uri != null) {
+            val newUser = User(name, email)
+            firebaseFirestore.collection("user")
+                .add(newUser)
+                .addOnSuccessListener {
+                   liveDataResponse.postValue(true)
+                }
+        }
 
         return liveDataResponse
     }

@@ -1,8 +1,11 @@
 package com.example.appnote.view.login
 
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.appnote.data.login.LoginRepository
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 class LoginViewModel: ViewModel() {
 

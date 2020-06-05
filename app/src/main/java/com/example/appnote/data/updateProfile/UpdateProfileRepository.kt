@@ -63,7 +63,7 @@ class UpdateProfileRepository {
         val updateUser = user.currentUser?.email?.let { User( name, it) }
         firebaseFirestore.collection("user")
             .whereEqualTo("email", user.currentUser?.email)
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            .addSnapshotListener { querySnapshot, _ ->
                 if(querySnapshot != null){
 
                     for (doc in querySnapshot){

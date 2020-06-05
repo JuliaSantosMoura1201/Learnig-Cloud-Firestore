@@ -122,6 +122,13 @@ class SaveNoteRepository {
                         note.state = it
                     }
 
+                    doc.getBoolean("notificationOn")?.let {
+                        note.notificationOn = it
+                    }
+
+                    doc.getBoolean("alarmOn")?.let {
+                        note.alarmOn = it
+                    }
                     note.userEmail = user.currentUser?.email
                     liveDataResponse.postValue(note)
                 }
