@@ -1,5 +1,8 @@
 package com.example.appnote.view.main
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.appnote.data.main.MainRepository
@@ -42,5 +45,11 @@ class MainViewModel: ViewModel() {
     }
     fun logOut(){
         repository.logOut()
+    }
+
+    fun hasInternetConnected(context: Context): Boolean{
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        return activeNetwork?.isConnectedOrConnecting == true
     }
 }

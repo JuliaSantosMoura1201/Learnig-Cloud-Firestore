@@ -1,7 +1,9 @@
 package com.example.appnote.view.updateProfile
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -27,6 +29,8 @@ class UpdateProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        configSharedPreferences()
         setContentView(R.layout.activity_update_profile)
 
         viewModel = ViewModelProvider(this).get(UpdateProfileViewModel::class.java)
@@ -116,5 +120,16 @@ class UpdateProfileActivity : AppCompatActivity() {
                 finish()
             }
         })
+    }
+
+    private fun configSharedPreferences(){
+        val sharedPreferences: SharedPreferences = getSharedPreferences("ThemePref", Context.MODE_PRIVATE)
+        val themeKey = "currentTheme"
+
+        when(sharedPreferences.getString(themeKey, "pattern")){
+            "optionYellow" -> theme.applyStyle(R.style.OverlayThemeYellow, true)
+            "optionPurple" -> theme.applyStyle(R.style.OverlayThemePurple, true)
+            "pattern" -> theme.applyStyle(R.style.OverlayThemeLine, true)
+        }
     }
 }

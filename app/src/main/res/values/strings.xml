@@ -21,6 +21,7 @@
     <!--Main-->
     <string name="hint_title">Title</string>
     <string name="hint_description">Description</string>
+    <string name="is_not_connected">To use this resource you should have access to internet</string>
 
     <!--Login-->
     <string name="prompt_password">Password</string>
