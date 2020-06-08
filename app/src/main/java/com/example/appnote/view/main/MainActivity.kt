@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.crashlytics.android.Crashlytics
 import com.example.appnote.R
 import com.example.appnote.model.Note
+import com.example.appnote.model.NoteRealmDb
 import com.example.appnote.view.customize.CustomizeActivity
 import com.example.appnote.view.save.SaveNotesActivity
 import com.example.appnote.view.delete.DeleteDialog
@@ -31,6 +32,8 @@ import com.example.appnote.view.research.ResearchActivity
 import com.example.appnote.view.updateProfile.UpdateProfileActivity
 import com.google.android.material.navigation.NavigationView
 import io.fabric.sdk.android.Fabric
+import io.realm.Realm
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
@@ -40,9 +43,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private var notesList = ArrayList<Note>()
     var idDialog = ""
-    val deleteDialog= DeleteDialog.newInstance(this)
+    private val deleteDialog = DeleteDialog.newInstance(this)
     private lateinit var v : View
     private lateinit var viewModel: MainViewModel
+    private lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
 
+        realm = Realm.getDefaultInstance()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         v = nav_view.getHeaderView(0)
 
@@ -65,38 +70,78 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         getImage()
 
         addNotes.setOnClickListener {
-            startActivity(Intent(this, SaveNotesActivity::class.java))
-            finish()
+            goToAddActivity(false)
         }
 
         Fabric.with(this, Crashlytics())
-
-    }
-
-    override fun onStart() {
-        super.onStart()
         notesRV.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
     }
 
     private fun getAllNotes(){
         notesList.clear()
-        viewModel.getNotes().observe(this, Observer {
-            fillAdapter(it)
+        viewModel.getNotes().observe(this, Observer {listOfNotes ->
+
+            realm.beginTransaction()
+            realm.deleteAll()
+            realm.commitTransaction()
+
+            for (note in listOfNotes){
+                realm.beginTransaction()
+                realm.copyToRealmOrUpdate(setDataToNote(autoIncrementId(), note))
+                realm.commitTransaction()
+            }
+
+            val results: RealmResults<NoteRealmDb> = realm.where<NoteRealmDb>(NoteRealmDb::class.java).findAll()
+            fillAdapter(results)
+
         })
+
 
     }
 
-    private fun fillAdapter(list: ArrayList<Note>){
+    private fun autoIncrementId(): Int{
+        val currentIdNumber: Number? = realm.where(NoteRealmDb::class.java).max("id")
+        val nextID: Int
+
+        nextID = if (currentIdNumber == null){
+            1
+        }else{
+            currentIdNumber.toInt() + 1
+        }
+        return nextID
+    }
+
+    private fun setDataToNote(nextID: Int, note: Note): NoteRealmDb{
+       return NoteRealmDb(
+            nextID,
+            note.title,
+            note.description,
+            note.day,
+            note.month,
+            note.year,
+            note.hour,
+            note.minute,
+            note.place,
+            note.state,
+            note.userEmail,
+            note.notificationOn,
+            note.alarmOn,
+            note.id
+        )
+
+    }
+
+    private fun fillAdapter(list: RealmResults<NoteRealmDb>){
         notesRV.adapter = NotesAdapter(list, getScreenWidth(),
             object : NotesAdapter.NotesListener {
                 override fun deleteNote(id: String) {
-                    supportFragmentManager.beginTransaction().add(deleteDialog, null).commitAllowingStateLoss()
                     idDialog = id
+                    showDeleteDialog()
                 }
 
                 override fun editNote(id: String) {
                     idDialog = id
-                    goToAddActivity()
+                    goToAddActivity(true)
                 }
 
                 override fun changeState(id: String) {
@@ -109,12 +154,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         notesRV.adapter!!.notifyDataSetChanged()
     }
 
+    private fun showDeleteDialog(){
+        if(viewModel.hasInternetConnected(applicationContext)){
+            supportFragmentManager.beginTransaction().add(deleteDialog, null).commitAllowingStateLoss()
+        }else{
+            showToast(R.string.is_not_connected)
+        }
+    }
+
     private fun fieldComponents(){
         viewModel.updateState(idDialog).observe(this, Observer {
             if (it){
                 restartActivity()
             }else{
-                showToast()
+                showToast(R.string.general_error)
             }
         })
     }
@@ -145,7 +198,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if(it){
                 restartActivity()
             }else{
-                showToast()
+                showToast(R.string.general_error)
             }
         })
     }
@@ -155,69 +208,113 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if(it){
                 deleteNote()
             }else{
-                showToast()
+                showToast(R.string.general_error)
             }
         })
     }
+
     private fun deleteAll(){
         viewModel.deleteAll().observe(this, Observer {
             if (it){
                 getAllNotes()
             }else{
-                showToast()
+                showToast(R.string.general_error)
             }
         })
     }
 
     private fun deleteAllImages(){
-        viewModel.deleteAllImages().observe(this, Observer {
-            if (it){
-                deleteAll()
-            }else{
-                showToast()
-            }
-        })
+        if(viewModel.hasInternetConnected(this)){
+            viewModel.deleteAllImages().observe(this, Observer {
+                if (it){
+                    deleteAll()
+                }else{
+                    showToast(R.string.general_error)
+                }
+            })
+        }else{
+           showToast(R.string.is_not_connected)
+        }
+
     }
 
-    private fun goToLogin(){
-        val intent= Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    private fun goToAddActivity(){
-        val intent = Intent(this@MainActivity, SaveNotesActivity::class.java)
-        intent.putExtra("id", idDialog)
-        startActivity(intent)
-    }
-
-    private fun showToast(){
-        Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_SHORT).show()
+    private fun showToast(message: Int){
+        Toast.makeText(this, getString(message), Toast.LENGTH_SHORT).show()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
 
             R.id.nav_research -> {
-                startActivity(Intent(this, ResearchActivity::class.java))
+                goToResearchActivity()
             }
             R.id.nav_tips -> {
-                startActivity(Intent(this, PokemonActivity::class.java))
+                goToPokemonActivity()
             }
             R.id.nav_logout -> {
-                viewModel.logOut()
-                goToLogin()
+               goToLogin()
             }
             R.id.nav_update -> {
-               startActivity(Intent(this, UpdateProfileActivity::class.java))
+                goToUpdateProfileActivity()
             }
             R.id.nav_customize -> {
-                startActivity(Intent(this, CustomizeActivity::class.java))
-                finish()
+                goToCustomizeActivity()
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun goToLogin(){
+        if(viewModel.hasInternetConnected(this)){
+            viewModel.logOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }else{
+            showToast(R.string.is_not_connected)
+        }
+
+    }
+
+    private fun goToAddActivity(putExtra: Boolean){
+        if(viewModel.hasInternetConnected(this)){
+            val intent = Intent(this@MainActivity, SaveNotesActivity::class.java)
+            if (putExtra){
+                intent.putExtra("id", idDialog)
+            }
+            startActivity(intent)
+        }else{
+            showToast(R.string.is_not_connected)
+        }
+    }
+
+    private fun goToCustomizeActivity(){
+        startActivity(Intent(this, CustomizeActivity::class.java))
+        finish()
+    }
+
+    private fun goToUpdateProfileActivity(){
+        if (viewModel.hasInternetConnected(this)){
+            startActivity(Intent(this, UpdateProfileActivity::class.java))
+        }else{
+            showToast(R.string.is_not_connected)
+        }
+    }
+
+    private fun goToResearchActivity(){
+        if(viewModel.hasInternetConnected(this)){
+            startActivity(Intent(this, ResearchActivity::class.java))
+        }else{
+            showToast(R.string.is_not_connected)
+        }
+    }
+
+    private fun goToPokemonActivity(){
+        if(viewModel.hasInternetConnected(this)){
+            startActivity(Intent(this, PokemonActivity::class.java))
+        }else{
+            showToast(R.string.is_not_connected)
+        }
     }
 
     private fun configSharedPreferences(){
