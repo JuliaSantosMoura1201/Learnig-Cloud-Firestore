@@ -7,7 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.appnote.data.main.MainRepository
 import com.example.appnote.model.Note
+import com.example.appnote.model.NoteRealmDb
 import com.example.appnote.model.User
+import io.realm.RealmResults
 
 class MainViewModel: ViewModel() {
 
@@ -51,5 +53,9 @@ class MainViewModel: ViewModel() {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         return activeNetwork?.isConnectedOrConnecting == true
+    }
+
+    fun receiveListOfNotesFromFirebaseAndInsertOnRealmDb(listOfNotes: ArrayList<Note>): RealmResults<NoteRealmDb> {
+        return repository.receiveListOfNotesFromFirebaseAndInsertOnRealmDb(listOfNotes)
     }
 }

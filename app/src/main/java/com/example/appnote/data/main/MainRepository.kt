@@ -2,14 +2,18 @@ package com.example.appnote.data.main
 
 import androidx.lifecycle.MutableLiveData
 import com.example.appnote.model.Note
+import com.example.appnote.model.NoteRealmDb
 import com.example.appnote.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import io.realm.Realm
+import io.realm.RealmResults
 
 class MainRepository {
 
+    private lateinit var realm: Realm
     private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var storageReference: StorageReference = firebaseStorage.reference
@@ -223,6 +227,54 @@ class MainRepository {
 
     fun logOut(){
         user.signOut()
+    }
+
+    fun receiveListOfNotesFromFirebaseAndInsertOnRealmDb(listOfNotes: ArrayList<Note>): RealmResults<NoteRealmDb> {
+        realm = Realm.getDefaultInstance()
+        realm.beginTransaction()
+        realm.deleteAll()
+        realm.commitTransaction()
+
+        for (note in listOfNotes){
+            realm.beginTransaction()
+            realm.copyToRealmOrUpdate(setDataToNote(autoIncrementId(), note))
+            realm.commitTransaction()
+        }
+
+        return realm.where(NoteRealmDb::class.java).findAll()
+    }
+
+    private fun autoIncrementId(): Int{
+        val currentIdNumber: Number? = realm.where(NoteRealmDb::class.java).max("id")
+        val nextID: Int
+
+        nextID = if (currentIdNumber == null){
+            1
+        }else{
+            currentIdNumber.toInt() + 1
+        }
+        return nextID
+    }
+
+
+    private fun setDataToNote(nextID: Int, note: Note): NoteRealmDb{
+        return NoteRealmDb(
+            nextID,
+            note.title,
+            note.description,
+            note.day,
+            note.month,
+            note.year,
+            note.hour,
+            note.minute,
+            note.place,
+            note.state,
+            note.userEmail,
+            note.notificationOn,
+            note.alarmOn,
+            note.id
+        )
+
     }
 }
 

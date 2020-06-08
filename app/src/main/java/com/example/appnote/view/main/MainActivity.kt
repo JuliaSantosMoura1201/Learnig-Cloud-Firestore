@@ -32,7 +32,6 @@ import com.example.appnote.view.research.ResearchActivity
 import com.example.appnote.view.updateProfile.UpdateProfileActivity
 import com.google.android.material.navigation.NavigationView
 import io.fabric.sdk.android.Fabric
-import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val deleteDialog = DeleteDialog.newInstance(this)
     private lateinit var v : View
     private lateinit var viewModel: MainViewModel
-    private lateinit var realm: Realm
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
 
-        realm = Realm.getDefaultInstance()
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         v = nav_view.getHeaderView(0)
 
@@ -80,54 +79,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun getAllNotes(){
         notesList.clear()
         viewModel.getNotes().observe(this, Observer {listOfNotes ->
-
-            realm.beginTransaction()
-            realm.deleteAll()
-            realm.commitTransaction()
-
-            for (note in listOfNotes){
-                realm.beginTransaction()
-                realm.copyToRealmOrUpdate(setDataToNote(autoIncrementId(), note))
-                realm.commitTransaction()
-            }
-
-            val results: RealmResults<NoteRealmDb> = realm.where<NoteRealmDb>(NoteRealmDb::class.java).findAll()
-            fillAdapter(results)
+            fillAdapter(viewModel.receiveListOfNotesFromFirebaseAndInsertOnRealmDb(listOfNotes))
 
         })
 
-
-    }
-
-    private fun autoIncrementId(): Int{
-        val currentIdNumber: Number? = realm.where(NoteRealmDb::class.java).max("id")
-        val nextID: Int
-
-        nextID = if (currentIdNumber == null){
-            1
-        }else{
-            currentIdNumber.toInt() + 1
-        }
-        return nextID
-    }
-
-    private fun setDataToNote(nextID: Int, note: Note): NoteRealmDb{
-       return NoteRealmDb(
-            nextID,
-            note.title,
-            note.description,
-            note.day,
-            note.month,
-            note.year,
-            note.hour,
-            note.minute,
-            note.place,
-            note.state,
-            note.userEmail,
-            note.notificationOn,
-            note.alarmOn,
-            note.id
-        )
 
     }
 
