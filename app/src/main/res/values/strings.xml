@@ -73,4 +73,5 @@
     <string name="hint_name">Name</string>
     <string name="cv_profile_photo">Profile Photo</string>
     <string name="updatePassword">Send a password reset email</string>
+    <string name="cd_chosen_image">Chosen image</string>
 </resources>
