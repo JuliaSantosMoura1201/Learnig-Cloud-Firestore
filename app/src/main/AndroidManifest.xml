@@ -43,7 +43,13 @@
         <activity
             android:name=".view.save.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".view.save.SaveNotesActivity" />
+        <activity android:name=".view.save.SaveNotesActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
