@@ -10,7 +10,7 @@ import android.text.style.UnderlineSpan
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.appnote.view.singin.CreateAccountActivity
+import com.example.appnote.view.signIn.CreateAccountActivity
 import com.example.appnote.R
 import com.example.appnote.view.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*

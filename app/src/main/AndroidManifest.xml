@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.customize.CustomizeActivity" />
-        <activity android:name=".view.singin.CreateAccountActivity" />
+        <activity android:name=".view.signIn.CreateAccountActivity" />
         <activity android:name=".view.login.LoginActivity" />
         <activity android:name=".view.research.ResearchActivity" />
 

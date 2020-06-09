@@ -21,7 +21,7 @@ class SingInRepository {
     private var storageReference: StorageReference = firebaseStorage.reference
     private val user: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun singIn(email: String, password: String): MutableLiveData<Boolean> {
+    fun signIn(email: String, password: String): MutableLiveData<Boolean> {
         val liveDataResponse =  MutableLiveData<Boolean>()
         user.createUserWithEmailAndPassword(email, password).addOnCompleteListener{task ->
                 if(task.isSuccessful){
