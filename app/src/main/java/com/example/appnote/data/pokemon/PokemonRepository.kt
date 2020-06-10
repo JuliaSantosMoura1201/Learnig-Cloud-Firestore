@@ -1,38 +1,44 @@
 package com.example.appnote.data.pokemon
 
-import com.example.appnote.model.Pokemon
+
 import androidx.lifecycle.MutableLiveData
-import com.example.appnote.model.ListPokemon
 import com.example.appnote.utils.Client
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 class PokemonRepository {
 
-    private val client = Client.retrofitInstance().create(PokemonService::class.java)
+    fun getData(): MutableLiveData<ArrayList<String>>{
+        val client = Client.retrofitInstance()
+        val liveDataResponse = MutableLiveData<ArrayList<String>>()
 
-    fun getPokemon(): MutableLiveData<List<Pokemon>>{
-        val liveDataResponse:MutableLiveData<List<Pokemon>> = MutableLiveData()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = client.getAll()
 
-        client.getAll().enqueue(object : Callback<ListPokemon> {
-            override fun onFailure(call: Call<ListPokemon>, t: Throwable) {
-                t.printStackTrace()
-            }
+            withContext(Dispatchers.Main){
+                try {
+                    if (response.isSuccessful){
+                        val list = response.body()?.results
+                        val names: ArrayList<String> = arrayListOf()
+                        if(list != null){
+                            for(pokemon in list){
+                                names.add(pokemon.name)
+                            }
+                            liveDataResponse.postValue(names)
+                        }
 
-            override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
-                var list : List<Pokemon> = listOf()
-                if(response.isSuccessful){
-                   response.body()?.let {
-                       list = it.results
-                   }
+                    }
+                }catch (e: HttpException){
+
                 }
-
-                liveDataResponse.postValue(list)
             }
+        }
 
-        })
-
-        return  liveDataResponse
+        return liveDataResponse
     }
+
+
 }

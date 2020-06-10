@@ -220,6 +220,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+
     private fun goToLogin(){
         if(viewModel.hasInternetConnected(this)){
             viewModel.logOut()
