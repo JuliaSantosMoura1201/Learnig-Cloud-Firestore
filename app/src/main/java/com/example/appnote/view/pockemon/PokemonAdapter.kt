@@ -8,6 +8,7 @@ import com.example.appnote.R
 import kotlinx.android.synthetic.main.pokemon.view.*
 
 class PokemonAdapter (private val pokemons: ArrayList<String>)
+
     : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val v: View =
@@ -20,7 +21,7 @@ class PokemonAdapter (private val pokemons: ArrayList<String>)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-       holder.itemView.txtPokemonName.text = pokemons[position]
+       holder.itemView.txtPokemonName.text = pokemons[position+1]
 
         when(position){
             0 -> holder.itemView.ivPokemon.setImageResource(R.drawable.wobbuffet)

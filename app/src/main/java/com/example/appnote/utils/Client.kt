@@ -1,8 +1,9 @@
 package com.example.appnote.utils
 
+import com.example.appnote.data.pokemon.PokemonService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 object Client {
 
@@ -13,11 +14,12 @@ object Client {
         chain.proceed(request)
     }.build()
 
-    fun retrofitInstance(): Retrofit{
+    fun retrofitInstance(): PokemonService {
         return Retrofit.Builder()
             .client(client())
             .baseUrl("https://pokeapi.co/api/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build().create(PokemonService::class.java)
+
     }
 }

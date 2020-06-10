@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:17.0.0'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
@@ -85,9 +85,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.6.0'
-    api 'com.squareup.retrofit2:converter-gson:2.6.0'
-    api 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:converter-moshi:2.9.0'
+    api 'com.squareup.okhttp3:logging-interceptor:4.7.2'
 
     //play service
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
@@ -95,4 +95,6 @@ dependencies {
     //CircleImage
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    //Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4'
 }

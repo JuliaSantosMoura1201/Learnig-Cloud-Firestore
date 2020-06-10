@@ -6,6 +6,7 @@
     android:layout_margin="5dp"
     android:id="@+id/cardNotes"
     android:orientation="vertical"
+    android:elevation="3dp"
     android:background="@drawable/grid_item_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,8 +2,8 @@ package com.example.appnote.view.pockemon
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,17 +29,7 @@ class PokemonActivity : AppCompatActivity() {
             false
         )
         viewModel.getPokemon().observe(this, Observer {
-            if (it != null){
-                val list: ArrayList<String> = arrayListOf()
-                list.add(it[1].name)
-                list.add(it[2].name)
-                list.add(it[3].name)
-                list.add(it[4].name)
-                list.add(it[5].name)
-
-                rvPokemon.adapter = PokemonAdapter(list)
-            }
-
+            rvPokemon.adapter = PokemonAdapter(it)
         })
     }
 
@@ -52,5 +42,9 @@ class PokemonActivity : AppCompatActivity() {
             "optionPurple" -> theme.applyStyle(R.style.OverlayThemePurple, true)
             "pattern" -> theme.applyStyle(R.style.OverlayThemeLine, true)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }
