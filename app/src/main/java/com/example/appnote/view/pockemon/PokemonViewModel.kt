@@ -1,14 +1,13 @@
 package com.example.appnote.view.pockemon
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.appnote.data.pokemon.PokemonRepository
 
-class PokemonViewModel: ViewModel() {
+class PokemonViewModel(val app: Application): AndroidViewModel(app) {
 
-    val repository: PokemonRepository = PokemonRepository()
-
-    fun getPokemon(): LiveData<ArrayList<String>>{
-        return repository.getData()
-    }
+    private val repository: PokemonRepository = PokemonRepository(app)
+    val pokemonData = repository.liveDataResponse
 }

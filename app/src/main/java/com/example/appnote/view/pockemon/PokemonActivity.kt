@@ -28,7 +28,7 @@ class PokemonActivity : AppCompatActivity() {
             RecyclerView.HORIZONTAL,
             false
         )
-        viewModel.getPokemon().observe(this, Observer {
+        viewModel.pokemonData.observe(this, Observer {
             rvPokemon.adapter = PokemonAdapter(it)
         })
     }
