@@ -1,6 +1,5 @@
 # Learnig-Cloud-Firestore
-App "Learning realm db" using firebase
-Criei esse app com o intuito de estudar todas as tecnologias da trilha de desenvolvedor android Júnior.
+Criei esse app com o intuito de estudar todas as tecnologias da trilha de desenvolvedor android Júnior da Compasso.
 É uma aplicativo simples, que permite ao usuário adicionar tarefas com grande nível de detalhamento. 
 É possível realizar cadastro utlizando login com google ou submetendo email, senha, nome e foto.
 Se o usuário não possuir acesso a internet ele ainda consegue ver as tarefas.
@@ -21,5 +20,8 @@ Tecnolgias utilizadas:
 	- Firebase Storage
 	- Firebase auth
 	- Play-services auth
-  - SharedPreferences
-Arquitetura MVVM
+	- Room
+	- Coroutines
+  	- SharedPreferences
+Arquitetura:
+	- MVVM
