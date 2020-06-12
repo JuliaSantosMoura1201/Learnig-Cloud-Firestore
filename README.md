@@ -8,7 +8,7 @@ Ainda é possível habilitar notificação, alarme e visualizar o endereço no g
 Ademais a pessoa pode ver uma listagem de 5 pokemon e modificar dados do seu perfil como: nome, foto e senha (para a última será enviado um email para a alteração).
 Além disso existem 3 configurações de cores possíveis para o app.
 Tecnolgias utilizadas:
-	- Google Maps
+	* Google Maps
 	- Crashlytics
 	- Picasso
 	- Kotlin
