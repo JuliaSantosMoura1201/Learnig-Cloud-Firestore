@@ -38,8 +38,9 @@ object NotificationHelper {
             setAutoCancel(autoCancel)
 
             val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("notifyID", 1001)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            val pendingIntent = PendingIntent.getActivity(context, 0,intent, 0)
+            val pendingIntent = PendingIntent.getActivity(context, 0,intent, PendingIntent.FLAG_CANCEL_CURRENT)
             setContentIntent(pendingIntent)
         }
 
